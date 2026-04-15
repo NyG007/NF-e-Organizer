@@ -1,6 +1,6 @@
-# NyG — Organizador de NF-e
+# NyG — Organizer de NF-e
 
-NyG — Organizador de NF-e is a Python-based system designed to automate the processing and organization of Brazilian electronic invoices (NF-e).
+NyG Organizer de NF-e is a Python-based system designed to automate the processing and organization of Brazilian electronic invoices (NF-e).
 
 The system reads XML files, extracts key financial and identification data, and organizes documents into a structured directory hierarchy based on year and month.
 
