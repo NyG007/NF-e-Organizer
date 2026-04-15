@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe">
+  <NFe>
+    <infNFe>
+      <ide>
+        <dhEmi>2026-02-10T14:00:00-03:00</dhEmi>
+      </ide>
+      <emit>
+        <CNPJ>11223344000177</CNPJ>
+        <xNome>Distribuidora Gama Ltda</xNome>
+      </emit>
+      <total>
+        <ICMSTot>
+          <vNF>780.00</vNF>
+        </ICMSTot>
+      </total>
+    </infNFe>
+  </NFe>
+</nfeProc>

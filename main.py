@@ -8,6 +8,7 @@ import os
 # ── Config ────────────────────────────────────────────────
 SAMPLE_FILE = "sample_nfe.xml"                                  # path to the sample XML file used for testing
 NAMESPACE   = {"nfe": "http://www.portalfiscal.inf.br/nfe"}     # NF-e namespace prefix required for tag lookup
+SAMPLE_DIR = "samples"                                          # path to the folder containing XML files
 
 # ── Loader ────────────────────────────────────────────────
 def load_xml(filepath: str) -> ET.Element | None:    # receives a file path and returns the root element or None
@@ -45,14 +46,36 @@ def extract_data(root: ET.Element) -> dict | None:  # receives the root of the X
         print("[ERROR] Required tag not found in XML")          # indicates which file is having problems
         return None                                             # Returns None for the caller to handle.
 
+# ── Processor ─────────────────────────────────────────────
+def process_directory(folder: str) -> list:                     # receives a folder path and returns a list of dicts
+    results = []                                                # stores successfully extracted data from each file
+
+    for filename in os.listdir(folder):                         # iterates over every item in the folder
+        if not filename.endswith(".xml"):                       # skips any file that is not an XML
+            continue
+
+        filepath = os.path.join(folder, filename)               # builds the full path to the file
+        root = load_xml(filepath)                               # loads and parses the XML file
+
+        if root is None:                                        # skips the file if loading failed
+            continue
+
+        data = extract_data(root)                               # extracts CNPJ, value and date from the root
+
+        if data:                                                # only appends if extraction was successful
+            data["filename"] = filename                         # adds the filename to the dict for reference
+            results.append(data)                                # adds the extracted data to the results list
+
+    return results                                              # returns all successfully processed records
+
 # ── Main ──────────────────────────────────────────────────
-if __name__ == "__main__":          # ensures that it only runs when run directly
-    root = load_xml(SAMPLE_FILE)    # loads the XML and returns the root element
+if __name__ == "__main__":                                      # ensures that it only runs when run directly
+    records = process_directory(SAMPLE_DIR)                   # processes all XML files in the samples folder
 
-    if root is not None:                # only proceeds if the file was loaded successfully
-        data = extract_data(root)       # extracts CNPJ, value and date from the root element
-
-        if data:                                        # only prints if extraction returned valid data
-            print(f"[OK] CNPJ: {data['cnpj']}")         # prints the issuer CNPJ
-            print(f"[OK] Value: {data['value']}")       # prints the total invoice value as float
-            print(f"[OK] Date: {data['date']}")         # prints the emission date formatted as YYYY-MM-DD
+    print(f"\n[OK] {len(records)} file(s) processed\n")        # prints the total number of files processed
+    for record in records:                                      # loops through each successfully extracted record
+        print(f"  File:  {record['filename']}")                 # prints the source filename
+        print(f"  CNPJ:  {record['cnpj']}")                    # prints the issuer CNPJ
+        print(f"  Value: {record['value']}")                   # prints the total invoice value
+        print(f"  Date:  {record['date']}")                    # prints the emission date
+        print()                                                 # blank line between records
