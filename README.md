@@ -4,6 +4,8 @@ NyG Organizer de NF-e is a Python-based system designed to automate the processi
 
 The system reads XML files, extracts key financial and identification data, and organizes documents into a structured directory hierarchy based on year and month.
 
+<img src="Running.jpeg"></img>
+
 ## Problem
 
 Companies often deal with large volumes of NF-e files stored in unstructured folders, leading to:
